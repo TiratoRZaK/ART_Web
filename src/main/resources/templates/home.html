@@ -1,8 +1,117 @@
-<html xmlns:th="http://www.w3.org/1999/xhtml">
-<head><title>Home Page</title></head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>АРТ-Терапия - Главная</title>
+    <link rel="icon" th:href="@{/img/Fevicon.png}" type="image/png">
+    <link rel="stylesheet" th:href="@{/vendors/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/vendors/fontawesome/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/vendors/themify-icons/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/vendors/linericon/style.css}">
+    <link rel="stylesheet" th:href="@{/vendors/owl-carousel/owl.theme.default.min.css}">
+    <link rel="stylesheet" th:href="@{/vendors/owl-carousel/owl.carousel.min.css}">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
 <body>
-<h1>Hello !</h1>
-<p>Welcome to Our App</p>
-<p th:text="'Hello, ' + ${name} + '!'" />
+<div th:insert="fragments/header :: header"></div>
+<main class="site-main">
+    <!--================ Баннер =================-->
+    <section class="hero-banner">
+        <div class="container">
+            <div class="row no-gutters align-items-center pt-60px">
+                <div class="col-5 d-none d-sm-block">
+                    <div class="hero-banner__img">
+                        <img class="img-fluid" src="img/home/hero-banner.png" alt="">
+                    </div>
+                </div>
+                <div class="col-sm-7 col-lg-6 offset-lg-1 pl-4 pl-md-5 pl-lg-0">
+                    <div class="hero-banner__content">
+
+                        <h4>Гапонова Нелли</h4>
+                        <h1>Изи разрисую ваши мозги</h1>
+                        <p>Описание процесса рисования :)</p>
+                        <!-- Кнопка для оставления заявки на консультацию -->
+                        <a class="button button-hero" href="#">Записаться сейчас</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================ Конец баннера =================-->
+
+    <!--================ Слайдер из фото с консультаций или рисунки =================-->
+    <section class="section-margin mt-0">
+        <div class="owl-carousel owl-theme hero-carousel">
+            <div class="hero-carousel__slide">
+                <img src="img/home/hero-slide1.png" alt="" class="img-fluid">
+                <a href="#" class="hero-carousel__slideOverlay">
+                    <h3>Wireless Headphone</h3>
+                    <p>Accessories Item</p>
+                </a>
+            </div>
+            <div class="hero-carousel__slide">
+                <img src="img/home/hero-slide2.png" alt="" class="img-fluid">
+                <a href="#" class="hero-carousel__slideOverlay">
+                    <h3>Wireless Headphone</h3>
+                    <p>Accessories Item</p>
+                </a>
+            </div>
+            <div class="hero-carousel__slide">
+                <img src="img/home/hero-slide3.png" alt="" class="img-fluid">
+                <a href="#" class="hero-carousel__slideOverlay">
+                    <h3>Wireless Headphone</h3>
+                    <p>Accessories Item</p>
+                </a>
+            </div>
+        </div>
+    </section>
+    <!--================ Конец слайдера =================-->
+
+    <!-- ================ Блок статей ================= -->
+    <section class="blog">
+        <div class="container">
+            <div class="section-intro pb-60px">
+                <h2>Интересные <span class="section-intro__style">статьи</span></h2>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-lg-4 mb-4 mb-lg-0" th:each="article, index : ${articles}"
+                     th:unless="${index.index > 2}">
+                    <div class="card card-blog">
+                        <div class="card-blog__img">
+                            <img class="card-img rounded-0" src="img/blog/blog1.png" alt="">
+                        </div>
+                        <div class="card-body">
+                            <ul class="card-blog__info">
+                                <li><a th:text="${article.author_name}"></a></li>
+                                <li><a th:text="${article.size()}"><i class="ti-comments-smiley"></i></a> комментариев
+                                </li>
+                            </ul>
+                            <h4 class="card-blog__title"><a href="single-blog.html" th:text="${article.title}"></a></h4>
+                            <p th:text="${article.text.substring(0, 100)}"></p>
+                            <a class="card-blog__link" href="#">Читать далее <i class="ti-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ================ Blog section end ================= -->
+</main>
+<div th:insert="fragments/footer :: footer"></div>
+
+<script th:src="@{vendors/jquery/jquery-3.2.1.min.js}"></script>
+<script th:src="@{vendors/bootstrap/bootstrap.bundle.min.js}"></script>
+<script th:src="@{vendors/skrollr.min.js}"></script>
+<script th:src="@{vendors/owl-carousel/owl.carousel.min.js}"></script>
+<script th:src="@{vendors/nice-select/jquery.nice-select.min.js}"></script>
+<script th:src="@{vendors/jquery.ajaxchimp.min.js}"></script>
+<script th:src="@{vendors/mail-script.js}"></script>
+<script th:src="@{js/main.js}"></script>
 </body>
 </html>

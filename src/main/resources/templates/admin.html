@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <meta charset="utf-8">
+    <title>Log in with your account</title>
+    <link rel="stylesheet" type="text/css" href="@{/css/style.css}">
+</head>
+
+<body>
+<div>
+    <table>
+        <thead>
+        <th>ID</th>
+        <th>UserName</th>
+        <th>Password</th>
+        <th>Roles</th>
+        </thead>
+        <div th:each="user, index : ${allUsers}">
+            <tr>
+                <td th:text="${user.id}"
+                </td>
+                <td th:text="${user.email}"
+                </td>
+                <td th:text="${user.password}"
+                </td>
+                <td>
+                    <div th:each="role : ${user.roles}">
+                        <span th:text="${role.name}">
+
+                        </span>
+                    </div>
+                </td>
+                <td>
+                    <form action="/admin" method="post">
+                        <input type="hidden" name="userId" value="${user.id}"/>
+                        <input type="hidden" name="action" value="delete"/>
+                        <button type="submit">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        </div>
+    </table>
+    <a href="/">Главная</a>
+</div>
+</body>
+</html>

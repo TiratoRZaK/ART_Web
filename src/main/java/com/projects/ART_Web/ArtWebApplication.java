@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ArtWebApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(ArtWebApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ArtWebApplication.class, args);
+    }
 }

@@ -1,0 +1,51 @@
+<div th:fragment="header" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <header class="header_area">
+        <div class="main_menu">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="container">
+                    <!-- Вставить Лого -->
+                    <a class="navbar-brand logo_h" href="/"><img src="/img/logo.png" alt=""></a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
+                            <li class="nav-item active"><a class="nav-link" href="/">Главная</a></li>
+                            <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item"><a class="nav-link" href="/admin">Админ-панель</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/blog">Интересное</a></li>
+                        </ul>
+
+                        <ul class="nav-shop">
+                            <!-- Кнопки: Личный кабинет и Заявки -->
+                            <li class="nav-item">
+                                <button><i class="ti-search"></i></button>
+                            </li>
+                            <li class="nav-item">
+                                <button><i class="ti-shopping-cart"></i><span class="nav-shop__circle">3</span></button>
+                            </li>
+                            <!-- Надо сделать кнопку входа и выхода -->
+                            <li class="nav-item">
+                                <a class="text-muted" sec:authorize="isAuthenticated()"><span sec:authentication="name"></span></a>
+                            </li>
+                            <li class="nav-item">
+                                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+                                    <input class="button button-header" type="submit" value="Выйти"/>
+                                </form>
+                            </li>
+                            <li class="nav-item">
+                                <a sec:authorize="!isAuthenticated()" class="button button-header" href="/login">Вход</a>
+                            </li>
+                            <li class="nav-item">
+                                <a sec:authorize="!isAuthenticated()" class="button button-header" href="/register">Регистрация</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+</div>
