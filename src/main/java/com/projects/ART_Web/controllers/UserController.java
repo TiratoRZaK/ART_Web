@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 
@@ -19,34 +20,34 @@ public class UserController {
     private UserService userService;
     @Autowired
     private UserValidator userValidator;
+    private BindingResult validateErrors;
 
     @GetMapping(path = "/register")
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
+
+        if (validateErrors != null && validateErrors.hasErrors()) {
+            model.addAttribute("errors", validateErrors);
+        }
         return "register";
     }
 
     @PostMapping(path = "/register")
-    public String registration(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, Model model) {
-        userValidator.validate(userForm, bindingResult);
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("errors",bindingResult);
-            return "/register";
+    public String registration(@ModelAttribute("userForm") @Valid User userForm, BindingResult errors, Model model) {
+        userValidator.validate(userForm, errors);
+        if (errors.hasErrors()) {
+            validateErrors = errors;
+            return "redirect:/register";
         }
-        if (!userService.saveUser(userForm)) {
-            model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
-            return "/register";
-        }
+        userService.saveUser(userForm);
         return "redirect:/";
     }
 
     @GetMapping(path = "/login")
-    public String login(Model model, String error, String logout) {
+    public String login(@RequestParam(name = "error", required = false) String error,
+                        Model model) {
         if (error != null) {
             model.addAttribute("error", "Email или пароль введены некорректно!");
-        }
-        if (logout != null) {
-            model.addAttribute("message", "Вы успешно вышли со своей страницы.");
         }
         return "login";
     }

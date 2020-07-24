@@ -16,18 +16,22 @@ public class Request {
     @JoinColumn(name = "user_id")
     private User author;
 
+    private String name;
+    private Gender gender;
+    private TimeInterval timeInterval;
     private String problem;
     private Date date_create;
-    private int status = 1;
+    private Status status = Status.created;
+    private Date date;
+    private int age;
+    private String phone;
 
     public Request() {
         this.date_create = Date.valueOf(LocalDate.now());
     }
 
-    public Request(User author, String problem) {
+    public Request(User author) {
         this.author = author;
-        this.problem = problem;
-        this.date_create = Date.valueOf(LocalDate.now());
     }
 
     public Long getId() {
@@ -62,11 +66,59 @@ public class Request {
         this.date_create = date_create;
     }
 
-    public int getStatus() {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public TimeInterval getTimeInterval() {
+        return timeInterval;
+    }
+
+    public void setTimeInterval(TimeInterval timeInterval) {
+        this.timeInterval = timeInterval;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

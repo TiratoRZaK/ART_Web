@@ -22,21 +22,20 @@ public class UserValidator implements Validator {
     public void validate(Object o, Errors errors) {
         User user = (User) o;
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "Required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "Required.email","Это поле обязательно для заполнения.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "Required.name","Это поле обязательно для заполнения.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Required.password","Это поле обязательно для заполнения.");
         if (userService.loadUserByUsername(user.getEmail()) != null) {
-            errors.rejectValue("email", "Duplicate.userForm.email");
+            errors.rejectValue("email", "Duplicate.email","Эта почта уже зарегистрирована.");
         }
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "age", "Required");
-        if (user.getAge() < 18) {
-            errors.rejectValue("age", "Min.userForm.age");
-        }
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Required");
         if (user.getPassword().length() < 8) {
-            errors.rejectValue("password", "Size.userForm.password");
+            errors.rejectValue("password", "Size.password","Пароль должен содержать минимум 8 символов.");
+        }
+        if (user.getName().length() < 2) {
+            errors.rejectValue("name", "Size.name","Имя не может быть короче 2 символов.");
         }
         if (!user.getPassword().equals(user.getConfirmPassword())) {
-            errors.rejectValue("confirmPassword", "Different.userForm.password");
+            errors.rejectValue("confirmPassword", "Different.password","Пароли не совпадают.");
         }
-
     }
 }

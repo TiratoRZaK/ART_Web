@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Aroma Shop - Login</title>
+    <link rel="icon" href="img/Fevicon.png" type="image/png">
+    <link rel="stylesheet" href="vendors/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="vendors/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="vendors/themify-icons/themify-icons.css">
+    <link rel="stylesheet" href="vendors/linericon/style.css">
+    <link rel="stylesheet" href="vendors/owl-carousel/owl.theme.default.min.css">
+    <link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="vendors/nice-select/nice-select.css">
+    <link rel="stylesheet" href="vendors/nouislider/nouislider.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header th:insert="fragments/header :: header"></header>
+
+<!-- ================ start banner area ================= -->
+<section class="blog-banner-area" id="category">
+    <div class="container h-100">
+        <div class="blog-banner">
+            <div class="text-center">
+                <h1>Регистрация</h1>
+                <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Регистрация</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ end banner area ================= -->
+
+<!--================Login Box Area =================-->
+<section class="login_box_area section-margin">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="login_box_img">
+                    <div class="hover">
+                        <h4>Уже зарегистрированы?</h4>
+                        <p>Здесь вы можете войти на сайт со своими данными. Это не займёт много времени.</p>
+                        <a class="button button-account" href="/login">Войти</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="login_form_inner register_form_inner">
+                    <h3>Создание нового аккаунта</h3>
+                    <form class="row login_form was-validated" modelAttribute="userForm" th:action="@{/register}"
+                          method="post"
+                          id="register_form">
+                        <div class="col-md-12 mb-3 form-group">
+                            <label for="form-2-first-name">Имя</label>
+                            <input name="name" type="text" class="form-control" id="form-2-first-name"
+                                   placeholder="Например: Иван" required="" />
+                            <div class="invalid-feedback" th:if="${errors!=null && errors.hasFieldErrors('name')}">
+                                <label th:text="${errors.getFieldError('name').getDefaultMessage()}"></label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3 form-group">
+                            <label for="form-2-email">Email</label>
+                            <input name="email" type="email" class="form-control" id="form-2-email"
+                                   placeholder="Адрес электронной почты" required="" />
+                            <div class="invalid-feedback" th:if="${errors!=null && errors.hasFieldErrors('email')}">
+                                <label th:text="${errors.getFieldError('email').getDefaultMessage()}"></label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3 form-group">
+                            <label for="form-2-password">Пароль</label>
+                            <input name="password" type="password" class="form-control" id="form-2-password"
+                                   placeholder="Придумайте пароль (минимум 8 символов)" required="" />
+                            <div class="invalid-feedback" th:if="${errors!=null && errors.hasFieldErrors('password')}">
+                                <label th:text="${errors.getFieldError('password').getDefaultMessage()}"></label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3 form-group">
+                            <label for="form-2-confirmPassword">Подтверждение пароля</label>
+                            <input name="confirmPassword" type="password" class="form-control"
+                                   id="form-2-confirmPassword" placeholder="Повторите ввод пароля"
+                                   required="" />
+                            <div class="invalid-feedback" th:if="${errors!=null && errors.hasFieldErrors('confirmPassword')}">
+                                <label th:text="${errors.getFieldError('confirmPassword').getDefaultMessage()}"></label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3 form-group" style="margin-top: 40px">
+                            <button type="submit" value="submit" class="button button-register w-100">
+                                Зарегистрироваться
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Login Box Area =================-->
+<footer th:insert="fragments/footer :: footer"></footer>
+
+
+<script src="vendors/jquery/jquery-3.2.1.min.js"></script>
+<script src="vendors/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="vendors/skrollr.min.js"></script>
+<script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+<script src="vendors/nice-select/jquery.nice-select.min.js"></script>
+<script src="vendors/jquery.ajaxchimp.min.js"></script>
+<script src="vendors/mail-script.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

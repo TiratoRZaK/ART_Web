@@ -14,12 +14,12 @@
                     </button>
                     <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                         <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
-                            <li class="nav-item active"><a class="nav-link" href="/">Главная</a></li>
+                            <li class="nav-item active"><a class="nav-link" href="/">Главная страница</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/blog">Интересные статьи</a></li>
                             <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item"><a class="nav-link" href="/admin">Админ-панель</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/blog">Интересное</a></li>
                         </ul>
 
-                        <ul class="nav-shop">
+                        <ul sec:authorize="isAuthenticated()"  class="nav-shop">
                             <!-- Кнопки: Личный кабинет и Заявки -->
                             <li class="nav-item">
                                 <button><i class="ti-search"></i></button>
@@ -27,20 +27,21 @@
                             <li class="nav-item">
                                 <button><i class="ti-shopping-cart"></i><span class="nav-shop__circle">3</span></button>
                             </li>
+                            <li class="nav-item">
+                            </li>
                             <!-- Надо сделать кнопку входа и выхода -->
                             <li class="nav-item">
-                                <a class="text-muted" sec:authorize="isAuthenticated()"><span sec:authentication="name"></span></a>
+                                <a class="text-muted">Привет, <span sec:authentication="name">!</span></a>
                             </li>
                             <li class="nav-item">
-                                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+                                <form th:action="@{/logout}" method="post">
                                     <input class="button button-header" type="submit" value="Выйти"/>
                                 </form>
                             </li>
+                        </ul>
+                        <ul sec:authorize="!isAuthenticated()"  class="nav-shop">
                             <li class="nav-item">
-                                <a sec:authorize="!isAuthenticated()" class="button button-header" href="/login">Вход</a>
-                            </li>
-                            <li class="nav-item">
-                                <a sec:authorize="!isAuthenticated()" class="button button-header" href="/register">Регистрация</a>
+                                <a class="button button-header" href="/login">Войти на сайт</a>
                             </li>
                         </ul>
                     </div>
