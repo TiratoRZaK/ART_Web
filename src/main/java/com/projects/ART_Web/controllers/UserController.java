@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -20,6 +17,7 @@ public class UserController {
     private UserService userService;
     @Autowired
     private UserValidator userValidator;
+
     private BindingResult validateErrors;
 
     @GetMapping(path = "/register")
@@ -40,7 +38,8 @@ public class UserController {
             return "redirect:/register";
         }
         userService.saveUser(userForm);
-        return "redirect:/";
+        userService.autoLogin(userForm.getUsername());
+        return "redirect:/login";
     }
 
     @GetMapping(path = "/login")
@@ -50,5 +49,17 @@ public class UserController {
             model.addAttribute("error", "Email или пароль введены некорректно!");
         }
         return "login";
+    }
+
+    @GetMapping(path = "/activate/{code}")
+    public String activateMail(Model model, @PathVariable String code){
+        boolean isActivated = userService.activateUser(code);
+
+        if(isActivated){
+            model.addAttribute("message", "Пользователь успешно активировали аккаунт.<br> Можете войти в него.");
+        }else {
+            model.addAttribute("message", "Некорректный код активации.");
+        }
+        return "redirect:/login";
     }
 }

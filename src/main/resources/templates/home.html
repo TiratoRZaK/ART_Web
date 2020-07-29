@@ -36,7 +36,13 @@
                         <h1>Изи разрисую ваши мозги</h1>
                         <p>Описание процесса рисования :)</p>
                         <!-- Кнопка для оставления заявки на консультацию -->
-                        <a class="button button-hero" href="/request">Записаться сейчас</a>
+                        <div th:if="${activeRequest!=null}">
+                            <a class="button button-hero" th:href="${'/request/'+activeRequest.getId()}">Перейти
+                                к моей заявке</a>
+                        </div>
+                        <div th:if="${activeRequest==null}" >
+                            <a class="button button-hero" href="/request">Войти на сайт для отправки заявки</a>
+                        </div>
                     </div>
                 </div>
             </div>

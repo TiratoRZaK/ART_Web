@@ -1,32 +1,31 @@
 package com.projects.ART_Web.controllers;
 
-import com.google.api.client.util.DateTime;
+import com.projects.ART_Web.bot.ART_Web_bot;
 import com.projects.ART_Web.entities.Request;
+import com.projects.ART_Web.entities.Status;
 import com.projects.ART_Web.entities.User;
 import com.projects.ART_Web.interfaces.RequestRepository;
 import com.projects.ART_Web.validators.RequestValidator;
-import com.projects.ART_Web.validators.UserValidator;
-import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Role;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.List;
 
 @Controller
 public class RequestController {
@@ -38,15 +37,14 @@ public class RequestController {
     private BindingResult validateErrors;
 
     @GetMapping(path = "/request")
-    public String addRequest(@RequestParam(name = "confirm", required = false) boolean confirm, @AuthenticationPrincipal User user, Model model){
+    public String addRequest(@RequestParam(name = "confirm", required = false) boolean confirm, @AuthenticationPrincipal User user, Model model) {
         model.addAttribute("request", new Request(user));
         if (validateErrors != null && validateErrors.hasErrors()) {
             model.addAttribute("errors", validateErrors);
         }
-        if(confirm){
-            model.addAttribute("confirm", "Ваша заявка успешно отправлена! <br> Ожидайте ответа по электронной почте или звонка на указанный номер!");
-        }
-        else {
+        if (confirm) {
+            model.addAttribute("confirm", "Ваша заявка успешно отправлена! \nОжидайте ответа по электронной почте или звонка на указанный номер!");
+        } else {
             model.addAttribute("confirm", "");
         }
         Date dateNow = new Date();
@@ -58,7 +56,7 @@ public class RequestController {
     }
 
     @PostMapping(path = "/request")
-    public String addRequest(@ModelAttribute(name = "request") @Valid Request request, @AuthenticationPrincipal User user, BindingResult errors, Model model){
+    public String addRequest(@ModelAttribute(name = "request") @Valid Request request, @AuthenticationPrincipal User user, BindingResult errors, Model model) {
         request.setAuthor(user);
         requestValidator.validate(request, errors);
         if (errors.hasErrors()) {
@@ -66,6 +64,13 @@ public class RequestController {
             return "redirect:/request";
         }
         requestRepository.save(request);
+        ART_Web_bot.getBot().notifyOfNewRequest(request);
         return "redirect:/request?confirm=true";
+    }
+
+    @GetMapping(path = "/request/{id}")
+    public String addRequest(@PathVariable(name = "id", required=true) int id, @AuthenticationPrincipal User user , Model model) {
+        model.addAttribute("request", requestRepository.findRequestByAuthor(user));
+        return "myRequest";
     }
 }

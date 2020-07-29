@@ -2,6 +2,7 @@ package com.projects.ART_Web.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -21,7 +22,9 @@ public class Request {
     private TimeInterval timeInterval;
     private String problem;
     private Date date_create;
+    private String time;
     private Status status = Status.created;
+    private String causeCancel;
     private Date date;
     private int age;
     private String phone;
@@ -120,5 +123,22 @@ public class Request {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getCauseCancel() {
+        return causeCancel;
+    }
+
+    public void setCauseCancel(String causeCancel) {
+        this.causeCancel = causeCancel;
     }
 }

@@ -25,6 +25,7 @@ public class User implements UserDetails {
     private String password;
     @Transient
     private String confirmPassword;
+    private String activationCode;
 
     public boolean active;
 
@@ -126,5 +127,14 @@ public class User implements UserDetails {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
     }
 }
