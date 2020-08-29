@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@PreAuthorize("hasAuthority('ADMIN')")
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class AdminController {
     @Autowired
     private UserService userService;

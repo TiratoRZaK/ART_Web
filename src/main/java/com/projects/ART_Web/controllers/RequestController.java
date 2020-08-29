@@ -1,49 +1,49 @@
 package com.projects.ART_Web.controllers;
 
-import com.projects.ART_Web.bot.ART_Web_bot;
 import com.projects.ART_Web.entities.Request;
-import com.projects.ART_Web.entities.Status;
 import com.projects.ART_Web.entities.User;
 import com.projects.ART_Web.interfaces.RequestRepository;
+import com.projects.ART_Web.services.BotService;
 import com.projects.ART_Web.validators.RequestValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Controller
+@RequestMapping(value = "/request/")
 public class RequestController {
     @Autowired
     private RequestRepository requestRepository;
 
     @Autowired
+    private BotService botService;
+
+    @Autowired
     private RequestValidator requestValidator;
     private BindingResult validateErrors;
 
-    @GetMapping(path = "/request")
+    @GetMapping(path = "/new")
     public String addRequest(@RequestParam(name = "confirm", required = false) boolean confirm, @AuthenticationPrincipal User user, Model model) {
+        if(requestRepository.existsByAuthor(user)){
+            return "redirect:/request/my";
+        }
+
         model.addAttribute("request", new Request(user));
         if (validateErrors != null && validateErrors.hasErrors()) {
             model.addAttribute("errors", validateErrors);
         }
         if (confirm) {
-            model.addAttribute("confirm", "Ваша заявка успешно отправлена! \nОжидайте ответа по электронной почте или звонка на указанный номер!");
+            model.addAttribute("confirm", "Ваша заявка успешно отправлена! \n Ожидайте ответа по электронной почте или звонка на указанный номер!");
         } else {
             model.addAttribute("confirm", "");
         }
@@ -52,25 +52,33 @@ public class RequestController {
         model.addAttribute("dateMin", new SimpleDateFormat("yyyy-MM-dd").format(Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant())));
         model.addAttribute("dateMax", new SimpleDateFormat("yyyy-MM-dd").format(Date.from(localDateTime.plusWeeks(2).atZone(ZoneId.systemDefault()).toInstant())));
 
-        return "request";
+        return "/request/new";
     }
 
-    @PostMapping(path = "/request")
+    @PostMapping(path = "/new")
     public String addRequest(@ModelAttribute(name = "request") @Valid Request request, @AuthenticationPrincipal User user, BindingResult errors, Model model) {
         request.setAuthor(user);
         requestValidator.validate(request, errors);
         if (errors.hasErrors()) {
             validateErrors = errors;
-            return "redirect:/request";
+            return "/request/new";
         }
         requestRepository.save(request);
-        ART_Web_bot.getBot().notifyOfNewRequest(request);
-        return "redirect:/request?confirm=true";
+        botService.notifyOfNewRequest(request);
+        return "/request/my";
     }
 
-    @GetMapping(path = "/request/{id}")
-    public String addRequest(@PathVariable(name = "id", required=true) int id, @AuthenticationPrincipal User user , Model model) {
+    @GetMapping(path = "/my")
+    public String addRequest(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("request", requestRepository.findRequestByAuthor(user));
-        return "myRequest";
+        return "/request/my";
+    }
+
+    @GetMapping(path = "/cancel")
+    public String cancel(@AuthenticationPrincipal User user) {
+        Request request = requestRepository.findRequestByAuthor(user);
+        botService.notifyOfCancelRequest(request);
+        requestRepository.deleteById(request.getId());
+        return "redirect:/home";
     }
 }

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>АРТ-Терапия - Моя заявка</title>
+    <link rel="icon" th:href="@{/img/Fevicon.png}" type="image/png">
+    <link rel="stylesheet" th:href="@{/vendors/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/vendors/fontawesome/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/vendors/themify-icons/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/vendors/linericon/style.css}">
+    <link rel="stylesheet" th:href="@{/vendors/owl-carousel/owl.theme.default.min.css}">
+    <link rel="stylesheet" th:href="@{/vendors/owl-carousel/owl.carousel.min.css}">
+    <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet"/>
+
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<section class="blog-banner-area" id="category">
+    <div class="container h-100">
+        <div class="blog-banner">
+            <div class="text-center">
+                <h1>Моя заявка</h1>
+                <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Моя заявка</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="delModal">
+    <div class="modal-dialog">
+        <div class="confirmation-card">
+            <div class="modal-header">
+                <h3 class="billing-title">Удаление заявки</h3>
+                <button type="button" class="close" data-dismiss="modal" >&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 13px;">Вы уверены, что хотите удалить вашу заявку навсегда? <br> При удалении заявки внесённая
+                предоплата не возвращается, так как уходит на оплату аренды кабинета. </p>
+            </div>
+            <div class="modal-footer">
+                <a type="button" class="btn btn-danger" href="/request/cancel">Да, удалить заявку</a>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="order_details section-margin--small">
+    <div class="container">
+        <p class="text-center billing-title" style="color: black;">Спасибо за обращение. Ваша заявка не останется
+            нерассмотренной!<br>Статус
+            вашей заявки: <span style="color: #1e7e34"
+                                th:text="${request.getStatus().getText() + ((request.getStatus().ordinal()==3)?(' по причине '+ request.getCauseCancel()):(' '))}"></span>
+            <a data-toggle="modal" data-target="#delModal"><i style="color: #ff0000;" class="fas fa-times"></i></a>
+        </p>
+        <div class="row mb-5">
+            <div class="col-md-6 col-xl-4 mb-4 mb-xl-0">
+                <div class="confirmation-card">
+                    <table class="status-table"
+                           th:style="${(request.getStatus().ordinal()==0)?('opacity: 1'):('opacity: .25')}">
+                        <tbody>
+                        <tr>
+                            <td><h3 class="billing-title">Рассматривается</h3></td>
+                            <td th:if="${request.getStatus().ordinal()==0}" align="right"><img
+                                    th:src="@{/img/check.png}" alt=""></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="font-size: 13px;"><span style="color: #1e7e34">Ваша заявка отправлена Нелли.</span><br>
+                                После рассмотрения вашей заявки она назначит точное время и место консультации,
+                                а также откроет вам возможность совершения предоплаты.
+                            </td>
+                        </tr>
+                        <tr style="margin-top: 30px; font-size: 12px;">
+                            <td>Дата отправки заявки:</td>
+                            <td><span th:text="${request.getDate_create()}"></span></td>
+                        </tr>
+                        <tr style="margin-top: 30px; font-size: 12px;">
+                            <td>Дата консультации:</td>
+                            <td><span th:text="${request.getDate()}"></span></td>
+                        </tr>
+                        <tr style="margin-top: 30px; font-size: 12px;">
+                            <td>Временной промежуток:</td>
+                            <td><span th:text="${request.getTimeInterval().getText()}"></span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-4 mb-4 mb-xl-0">
+                <div class="confirmation-card">
+                    <table class="status-table"
+                           th:style="${(request.getStatus().ordinal()==1)?('opacity: 1'):('opacity: .25')}">
+                        <tbody>
+                        <tr>
+                            <td><h3 class="billing-title">Ожидает предоплату</h3></td>
+                            <td th:if="${request.getStatus().ordinal()==1}" align="right"><img
+                                    th:src="@{/img/check.png}" alt=""></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="font-size: 13px;"><span style="color: #1e7e34">Нелли изучила вашу заявку и готова помочь.</span><br>
+                                Изучите назначенное время и место консультации.
+                                Если возникнут вопросы, можете уточнить всё с помощью контактов, отправленных на вашу
+                                почту.
+                                С помощью кнопки ниже совершите предоплату для подтверждения записи на консультацию.
+                            </td>
+                        </tr>
+                        <tr style="margin-top: 30px; font-size: 12px;">
+                            <td>Дата и время консультации:</td>
+                            <td><span
+                                    th:text="${(request.getStatus().ordinal()==1)?(request.getDate().toString()+' '+request.getTime()):('Не назначены')} "></span>
+                            </td>
+                        </tr>
+                        <tr style="margin-top: 30px; font-size: 12px;">
+                            <td style="color: #777777;">Место консультации:</td>
+                            <td><span
+                                    th:text="${(request.getStatus().ordinal()==1)?('г. Санкт-Петербург, м.Невский проспект, ул.Казанская, 7В. Вход через арку и бизнес-центр Казанский. Более подробное описание маршрута отправленно на Вашу почту.'):('Не назначено')}"></span>
+                            </td>
+                        </tr>
+                        <tr style="margin-top: 30px;" th:if="${request.getStatus().ordinal()==1}">
+                            <td colspan="2">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d297.1489131034278!2d30.320478907745002!3d59.932612649614086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x469631044b473f4f%3A0x14edcd4e7b02de52!2z0JrQsNC30LDQvdGB0LrQsNGPINGD0LsuLCA30JIsINCh0LDQvdC60YIt0J_QtdGC0LXRgNCx0YPRgNCzLCAxOTExODY!5e0!3m2!1sru!2sru!4v1595882346130!5m2!1sru!2sru"
+                                        width="100%" height="150" frameborder="0" style="border:0;" allowfullscreen=""
+                                        aria-hidden="false" tabindex="0"></iframe>
+                            </td>
+                        </tr>
+                        <tr style="margin-top: 30px;">
+                            <td colspan="2">
+                                <a class="button button-login w-100 text-center" href="/">Внести предоплату</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-4 mb-4 mb-xl-0">
+                <div class="confirmation-card">
+                    <table class="status-table"
+                           th:style="${(request.getStatus().ordinal()==2)?('opacity: 1'):('opacity: .25')}">
+                        <tbody>
+                        <tr>
+                            <td><h3 class="billing-title">Подтверждена</h3></td>
+                            <td th:if="${request.getStatus().ordinal()==2}" align="right"><img
+                                    th:src="@{/img/check.png}" alt=""></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="font-size: 13px;"><span style="color: #1e7e34">Предоплата успешно совершена</span><br>
+                                Осталось совсем чуть-чуть, дождаться времени консультации и прибыть к её месту.<br>
+                                Спасибо за обращение и до встречи на консультации!
+                                Если возникнут вопросы, можете уточнить всё с помощью контактов, отправленных на вашу
+                                почту.
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!--        <div class="order_details_table">-->
+        <!--            <h2>Order Details</h2>-->
+        <!--            <div class="table-responsive">-->
+        <!--                <table class="table">-->
+        <!--                    <thead>-->
+        <!--                    <tr>-->
+        <!--                        <th scope="col">Product</th>-->
+        <!--                        <th scope="col">Quantity</th>-->
+        <!--                        <th scope="col">Total</th>-->
+        <!--                    </tr>-->
+        <!--                    </thead>-->
+        <!--                    <tbody>-->
+        <!--                    <tr>-->
+        <!--                        <td>-->
+        <!--                            <p>Pixelstore fresh Blackberry</p>-->
+        <!--                        </td>-->
+        <!--                        <td>-->
+        <!--                            <h5>x 02</h5>-->
+        <!--                        </td>-->
+        <!--                        <td>-->
+        <!--                            <p>$720.00</p>-->
+        <!--                        </td>-->
+        <!--                    </tr>-->
+        <!--                    <tr>-->
+        <!--                        <td>-->
+        <!--                            <p>Pixelstore fresh Blackberry</p>-->
+        <!--                        </td>-->
+        <!--                        <td>-->
+        <!--                            <h5>x 02</h5>-->
+        <!--                        </td>-->
+        <!--                        <td>-->
+        <!--                            <p>$720.00</p>-->
+        <!--                        </td>-->
+        <!--                    </tr>-->
+        <!--                    <tr>-->
+        <!--                        <td>-->
+        <!--                            <p>Pixelstore fresh Blackberry</p>-->
+        <!--                        </td>-->
+        <!--                        <td>-->
+        <!--                            <h5>x 02</h5>-->
+        <!--                        </td>-->
+        <!--                        <td>-->
+        <!--                            <p>$720.00</p>-->
+        <!--                        </td>-->
+        <!--                    </tr>-->
+        <!--                    <tr>-->
+        <!--                        <td>-->
+        <!--                            <h4>Subtotal</h4>-->
+        <!--                        </td>-->
+        <!--                        <td>-->
+        <!--                            <h5></h5>-->
+        <!--                        </td>-->
+        <!--                        <td>-->
+        <!--                            <p>$2160.00</p>-->
+        <!--                        </td>-->
+        <!--                    </tr>-->
+        <!--                    <tr>-->
+        <!--                        <td>-->
+        <!--                            <h4>Shipping</h4>-->
+        <!--                        </td>-->
+        <!--                        <td>-->
+        <!--                            <h5></h5>-->
+        <!--                        </td>-->
+        <!--                        <td>-->
+        <!--                            <p>Flat rate: $50.00</p>-->
+        <!--                        </td>-->
+        <!--                    </tr>-->
+        <!--                    <tr>-->
+        <!--                        <td>-->
+        <!--                            <h4>Total</h4>-->
+        <!--                        </td>-->
+        <!--                        <td>-->
+        <!--                            <h5></h5>-->
+        <!--                        </td>-->
+        <!--                        <td>-->
+        <!--                            <h4>$2210.00</h4>-->
+        <!--                        </td>-->
+        <!--                    </tr>-->
+        <!--                    </tbody>-->
+        <!--                </table>-->
+        <!--            </div>-->
+        <!--        </div>-->
+    </div>
+</section>
+<div th:insert="fragments/footer :: footer"></div>
+
+<script th:src="@{/vendors/jquery/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/vendors/bootstrap/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendors/skrollr.min.js}"></script>
+<script th:src="@{/vendors/owl-carousel/owl.carousel.min.js}"></script>
+<script th:src="@{/vendors/nice-select/jquery.nice-select.min.js}"></script>
+<script th:src="@{/vendors/jquery.ajaxchimp.min.js}"></script>
+<script th:src="@{/vendors/mail-script.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

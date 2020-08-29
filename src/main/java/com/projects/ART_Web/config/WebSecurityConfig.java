@@ -33,21 +33,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/css/**", "/img/**", "/vendors/**", "/js/**", "/scss/**");
-    }
-
-    @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeRequests()
                 //Доступ только для не зарегистрированных пользователей
                 .antMatchers("/register").not().fullyAuthenticated()
                 //Доступ только для пользователей с ролью Администратор
-                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/admin","/admin/**").hasRole("ADMIN")
                 //Доступ разрешен всем пользователей
                 .antMatchers("/", "/home", "/blog",
-                        "/activate/**", "/login", "/test").permitAll()
+                        "/activate/**", "/login", "/css/**","/img/**", "/vendors/**", "/js/**", "/scss/**").permitAll()
                 //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
                 .and()

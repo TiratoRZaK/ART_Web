@@ -24,7 +24,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
-    private MailService mailService;
+    private EmailService emailService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -62,7 +62,7 @@ public class UserService implements UserDetailsService {
                 user.getName(), user.getActivationCode()
         );
 
-        mailService.send(user.getEmail(), "Activation Code", message);
+        emailService.sendEmail(user.getEmail(), "Код подтверждения пользователя", message);
         return true;
     }
 

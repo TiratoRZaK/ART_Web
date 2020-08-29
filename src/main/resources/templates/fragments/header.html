@@ -1,10 +1,10 @@
 <div th:fragment="header" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
     <header class="header_area">
         <div class="main_menu">
-            <nav class="navbar navbar-expand-lg navbar-light">
+            <nav class="navbar navbar-expand-lg">
                 <div class="container">
                     <!-- Вставить Лого -->
-                    <a class="navbar-brand logo_h" href="/"><img src="/img/logo.png" alt=""></a>
+                    <a class="navbar-brand" href="/"><img src="/img/logoold.png" alt=""></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                             data-target="#navbarSupportedContent"
                             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,33 +13,70 @@
                         <span class="icon-bar"></span>
                     </button>
                     <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
-                        <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
-                            <li class="nav-item active"><a class="nav-link" href="/">Главная страница</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/blog">Интересные статьи</a></li>
-                            <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item"><a class="nav-link" href="/admin">Админ-панель</a></li>
+                        <ul class="nav navbar-nav ml-auto mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/">Главная страница</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/blog">Интересные статьи</a>
+                            </li>
+                            <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+                                <a class="nav-link" href="/admin">Админ-панель</a>
+                            </li>
                         </ul>
-
-                        <ul sec:authorize="isAuthenticated()"  class="nav-shop">
-                            <!-- Кнопки: Личный кабинет и Заявки -->
-                            <li class="nav-item">
-                                <button><i class="ti-search"></i></button>
+                        <ul sec:authorize="isAuthenticated()" class="nav-shop">
+                            <li class="nav-item dropdown mx-1" role="presentation">
+                                <div class="nav-item dropdown">
+                                    <a class="nav-link" title="Новые уведомления" data-toggle="dropdown"
+                                       aria-expanded="false" href="#">
+                                        <i class="fas fa-bell" style="color: #384aeb;"></i>
+                                        <span class="badge-alert badge-counter">2</span>
+                                    </a>
+                                    <div class="dropdown-menu notifications-menu" role="menu">
+                                        <h6 class="dropdown-header">Новые уведомления</h6>
+                                        <hr/>
+                                        <div class="d-flex notification">
+                                            <div class="p-3">
+                                                <img class="align-middle" src="/img/notifications/common.svg" alt="" width="16" height="16">
+                                            </div>
+                                            <div class="notification-text">
+                                                <span>Новая статья на сайте</span>
+                                                <p>"Психология для чайников" или как убить последние нервные клетки.</p>
+                                            </div>
+                                            <div class="p-2">
+                                                <a type="button" class="close">&times;</a>
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <div class="d-flex notification">
+                                            <div class="align-middle icon-circle p-3 ">
+                                                <i class="fas fa-file-alt"></i>
+                                            </div>
+                                            <div class="notification-text">
+                                                <span>Подтверждение почты</span>
+                                                <p>Перейдите по ссылке отправленной вам на почту.</p>
+                                            </div>
+                                            <div class="p-2">
+                                                <a type="button" class="close">&times;</a>
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <a class="text-center dropdown-item small" href="#">Показать все
+                                            уведомления</a>
+                                    </div>
+                                </div>
                             </li>
-                            <li class="nav-item">
-                                <button><i class="ti-shopping-cart"></i><span class="nav-shop__circle">3</span></button>
-                            </li>
-                            <li class="nav-item">
-                            </li>
-                            <!-- Надо сделать кнопку входа и выхода -->
                             <li class="nav-item">
                                 <a class="text-muted">Привет, <span sec:authentication="name">!</span></a>
                             </li>
                             <li class="nav-item">
                                 <form th:action="@{/logout}" method="post">
-                                    <input class="button button-header" type="submit" value="Выйти"/>
+                                    <button class="btn" title="Выход с аккаунта" type="submit"><i
+                                            class="fas fa-door-open"></i></button>
                                 </form>
                             </li>
                         </ul>
-                        <ul sec:authorize="!isAuthenticated()"  class="nav-shop">
+                        <ul sec:authorize="!isAuthenticated()" class="nav-shop">
                             <li class="nav-item">
                                 <a class="button button-header" href="/login">Войти на сайт</a>
                             </li>

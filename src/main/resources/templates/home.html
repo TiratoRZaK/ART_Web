@@ -16,7 +16,22 @@
     <link rel="stylesheet" th:href="@{/vendors/owl-carousel/owl.carousel.min.css}">
 
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{vendors/jquery/jquery-3.2.1.min.js}"></script>
+    <script th:src="@{vendors/bootstrap/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{vendors/skrollr.min.js}"></script>
+    <script th:src="@{vendors/owl-carousel/owl.carousel.min.js}"></script>
+    <script th:src="@{vendors/nice-select/jquery.nice-select.min.js}"></script>
+    <script th:src="@{vendors/jquery.ajaxchimp.min.js}"></script>
+    <script th:src="@{vendors/mail-script.js}"></script>
+    <script th:src="@{js/main.js}"></script>
 </head>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $.get('/notifyMe', function(data) {
+            console.log(data);
+        })
+    });
+</script>
 <body>
 <div th:insert="fragments/header :: header"></div>
 <main class="site-main">
@@ -26,7 +41,7 @@
             <div class="row no-gutters align-items-center pt-60px">
                 <div class="col-5 d-none d-sm-block">
                     <div class="hero-banner__img">
-                        <img class="img-fluid" src="img/home/hero-banner.png" alt="">
+                        <img class="img-fluid" src="img/home.png" alt="">
                     </div>
                 </div>
                 <div class="col-sm-7 col-lg-6 offset-lg-1 pl-4 pl-md-5 pl-lg-0">
@@ -37,11 +52,10 @@
                         <p>Описание процесса рисования :)</p>
                         <!-- Кнопка для оставления заявки на консультацию -->
                         <div th:if="${activeRequest!=null}">
-                            <a class="button button-hero" th:href="${'/request/'+activeRequest.getId()}">Перейти
-                                к моей заявке</a>
+                            <a class="button button-hero" href="/request/my">Узнать статус моей заявки</a>
                         </div>
-                        <div th:if="${activeRequest==null}" >
-                            <a class="button button-hero" href="/request">Войти на сайт для отправки заявки</a>
+                        <div th:if="${activeRequest==null}">
+                            <a class="button button-hero" href="/request/new">Записаться на консультацию к Нелли</a>
                         </div>
                     </div>
                 </div>
@@ -111,13 +125,6 @@
 </main>
 <div th:insert="fragments/footer :: footer"></div>
 
-<script th:src="@{vendors/jquery/jquery-3.2.1.min.js}"></script>
-<script th:src="@{vendors/bootstrap/bootstrap.bundle.min.js}"></script>
-<script th:src="@{vendors/skrollr.min.js}"></script>
-<script th:src="@{vendors/owl-carousel/owl.carousel.min.js}"></script>
-<script th:src="@{vendors/nice-select/jquery.nice-select.min.js}"></script>
-<script th:src="@{vendors/jquery.ajaxchimp.min.js}"></script>
-<script th:src="@{vendors/mail-script.js}"></script>
-<script th:src="@{js/main.js}"></script>
+
 </body>
 </html>

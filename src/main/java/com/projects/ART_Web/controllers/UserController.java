@@ -39,7 +39,7 @@ public class UserController {
         }
         userService.saveUser(userForm);
         userService.autoLogin(userForm.getUsername());
-        return "redirect:/login";
+        return "redirect:/home";
     }
 
     @GetMapping(path = "/login")
@@ -48,18 +48,19 @@ public class UserController {
         if (error != null) {
             model.addAttribute("error", "Email или пароль введены некорректно!");
         }
+        model.addAttribute("message", "Для записи на консультацию нужно войти на сайт");
         return "login";
     }
 
     @GetMapping(path = "/activate/{code}")
-    public String activateMail(Model model, @PathVariable String code){
+    public String activateMail(Model model, @PathVariable String code) {
         boolean isActivated = userService.activateUser(code);
 
-        if(isActivated){
+        if (isActivated) {
             model.addAttribute("message", "Пользователь успешно активировали аккаунт.<br> Можете войти в него.");
-        }else {
-            model.addAttribute("message", "Некорректный код активации.");
+        } else {
+            model.addAttribute("error", "Некорректный код активации.");
         }
-        return "redirect:/login";
+        return "login";
     }
 }
